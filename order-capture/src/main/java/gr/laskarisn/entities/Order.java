@@ -1,4 +1,4 @@
-package entities;
+package gr.laskarisn.entities;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -27,8 +27,8 @@ import org.hibernate.annotations.TypeDef;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
-import entities.customtypes.OrderStatus;
-import entities.customtypes.OrderStatusEnumType;;
+import gr.laskarisn.entities.customtypes.OrderStatus;
+import gr.laskarisn.entities.customtypes.OrderStatusEnumType;;
 
 @Entity(name="order")
 @Table(name="\"order\"")

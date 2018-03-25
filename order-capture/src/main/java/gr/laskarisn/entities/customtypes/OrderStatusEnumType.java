@@ -1,4 +1,4 @@
-package entities.customtypes;
+package gr.laskarisn.entities.customtypes;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

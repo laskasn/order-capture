@@ -23,14 +23,14 @@ import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonPrimitive;
 import com.google.gson.JsonSerializer;
 
-import app.Application;
-import entities.Customer;
-import entities.Order;
-import entities.Product;
-import entities.customtypes.OrderStatus;
-import repositories.CustomerRepository;
-import repositories.OrderRepository;
-import repositories.ProductRepository;
+import gr.laskarisn.app.Application;
+import gr.laskarisn.entities.Customer;
+import gr.laskarisn.entities.Order;
+import gr.laskarisn.entities.Product;
+import gr.laskarisn.entities.customtypes.OrderStatus;
+import gr.laskarisn.repositories.CustomerRepository;
+import gr.laskarisn.repositories.OrderRepository;
+import gr.laskarisn.repositories.ProductRepository;
 
 import java.io.IOException;
 import java.nio.charset.Charset;

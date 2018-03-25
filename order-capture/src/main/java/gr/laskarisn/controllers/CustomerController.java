@@ -1,10 +1,9 @@
-package controllers;
+package gr.laskarisn.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.Customer;
-
-import repositories.CustomerRepository;
+import gr.laskarisn.entities.Customer;
+import gr.laskarisn.repositories.CustomerRepository;
 
 import java.util.Date;
 import java.util.List;

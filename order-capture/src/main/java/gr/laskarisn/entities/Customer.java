@@ -1,4 +1,4 @@
-package entities;
+package gr.laskarisn.entities;
 
 import java.io.Serializable;
 import java.util.List;

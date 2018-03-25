@@ -1,4 +1,4 @@
-package app;
+package gr.laskarisn.app;
 
 import java.util.List;
 

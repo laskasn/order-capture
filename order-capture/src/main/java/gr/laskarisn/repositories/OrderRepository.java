@@ -1,12 +1,12 @@
-package repositories;
+package gr.laskarisn.repositories;
 
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import entities.Customer;
-import entities.Order;
+import gr.laskarisn.entities.Customer;
+import gr.laskarisn.entities.Order;
 
 
 @Repository("orderRepository")

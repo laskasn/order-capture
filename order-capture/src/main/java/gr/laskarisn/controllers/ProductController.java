@@ -1,10 +1,10 @@
-package controllers;
+package gr.laskarisn.controllers;
 
 import org.springframework.web.bind.annotation.RestController;
 
-import entities.Order;
+import gr.laskarisn.entities.Product;
 
-import repositories.OrderRepository;
+import gr.laskarisn.repositories.ProductRepository;
 
 import java.util.Date;
 import java.util.List;
@@ -22,28 +22,29 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @RestController
 @CrossOrigin
-@RequestMapping("/order")
-public class OrderController {
+@RequestMapping("/product")
+public class ProductController {
 	
 	
-	private OrderRepository orderRepository;
+	private ProductRepository productRepository;
 	
+
 	@Autowired
-	public void setOrderRepository(OrderRepository orderRepository) {
-		this.orderRepository = orderRepository;
+	public void setProductRepository(ProductRepository productRepository) {
+		this.productRepository = productRepository;
 	}
-	
+
 	
 	@RequestMapping("/count")
 	@ResponseBody
     public Long count() {
-		return orderRepository.count();
+		return productRepository.count();
     }
 	
 	@RequestMapping("/list")
 	@ResponseBody
-    public List<Order> list() {
-		return orderRepository.findAll();
+    public List<Product> list() {
+		return productRepository.findAll();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/get/{id}" }, produces="application/json")
@@ -55,36 +56,33 @@ public class OrderController {
 		catch(Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("That's not a valid uuid");
 		}
-		Order order = orderRepository.findOne(uuid);
-		return ResponseEntity.status(HttpStatus.OK).body(order);
+		Product product = productRepository.findOne(uuid);
+		return ResponseEntity.status(HttpStatus.OK).body(product);
 	}
 	
 	
 	
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> create(@RequestBody Order order) {
+	public @ResponseBody ResponseEntity<Object> create(@RequestBody Product product) {
 		try{
-			order.setOrderdate(new Date());
-			order.setLastupdatedate(new Date());
-			order = orderRepository.save(order);
+			product = productRepository.save(product);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create!");
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(order);
+		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
 	
 
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> update(@RequestBody Order order) {
+	public @ResponseBody ResponseEntity<Object> update(@RequestBody Product product) {
 		try{
-			order.setLastupdatedate(new Date());
-			order = orderRepository.save(order);
+			product = productRepository.save(product);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update!");
 		}
-		return ResponseEntity.status(HttpStatus.CREATED).body(order);
+		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
 	
 	
@@ -100,10 +98,9 @@ public class OrderController {
 		}
 		
 		try{
-			orderRepository.delete(uuid);
+			productRepository.delete(uuid);
 		}
 		catch(Exception ex){
-			ex.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete!");
 		}
 		return ResponseEntity.status(HttpStatus.OK).body("Deleted successfully!");

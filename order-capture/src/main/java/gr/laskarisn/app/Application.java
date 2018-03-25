@@ -1,4 +1,4 @@
-package app;
+package gr.laskarisn.app;
 
 
 import java.util.ArrayList;
@@ -34,9 +34,9 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
 @EnableTransactionManagement
-@EntityScan(value = "entities")
-@EnableJpaRepositories(basePackages = {"dao", "app", "entities", "repositories", "services"} )
-@SpringBootApplication(scanBasePackages={"entities", "app", "dao", "services", "security", "security.config", "security.validators", "controllers"})
+@EntityScan(value = "gr.laskarisn.entities")
+@EnableJpaRepositories(basePackages = {"gr.laskarisn.entities", "gr.laskarisn.repositories"} )
+@SpringBootApplication(scanBasePackages={"gr.laskarisn.entities", "gr.laskarisn.app", "gr.laskarisn.repositories", "gr.laskarisn.controllers"})
 //@EnableConfigurationProperties(SecurityProperties.class)
 //@ComponentScan ("security.validators")
 public class Application extends SpringBootServletInitializer{
