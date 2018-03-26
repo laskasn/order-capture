@@ -76,11 +76,12 @@ public class Order implements Serializable {
 	private OrderStatus orderstatus;
 	
 	public Order() {
-		
+		this.orderstatus = OrderStatus.NEW;
 	}
 	
 	public Order(UUID id) {
 		this.id = id;
+		this.orderstatus = OrderStatus.NEW;
 	}
 	
 	
@@ -89,6 +90,8 @@ public class Order implements Serializable {
 		this.products = products;
 		this.orderdate = orderdate;
 		this.lastupdatedate = lastupdatedate;
+		if(orderstatus==null)
+			orderstatus = OrderStatus.NEW;
 		this.orderstatus = orderstatus;
 	}
 

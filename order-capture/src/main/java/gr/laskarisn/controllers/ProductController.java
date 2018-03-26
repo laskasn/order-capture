@@ -3,7 +3,7 @@ package gr.laskarisn.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.laskarisn.entities.Product;
-
+import gr.laskarisn.messengers.PlainProduct;
 import gr.laskarisn.repositories.ProductRepository;
 import gr.laskarisn.services.ProductService;
 
@@ -60,9 +60,10 @@ public class ProductController {
 	
 	
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> create(@RequestBody Product product) {
+	public @ResponseBody ResponseEntity<Object> create(@RequestBody PlainProduct plainProduct) {
+		Product product;
 		try{
-			product = productService.createProduct(product);
+			product = productService.createProduct(plainProduct);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create! "+ ex.getMessage());
@@ -72,9 +73,10 @@ public class ProductController {
 	
 
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> update(@RequestBody Product product) {
+	public @ResponseBody ResponseEntity<Object> update(@RequestBody PlainProduct plainProduct) {
+		Product product;
 		try{
-			product = productService.updateProduct(product);
+			product = productService.updateProduct(plainProduct);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update! "+ ex.getMessage());

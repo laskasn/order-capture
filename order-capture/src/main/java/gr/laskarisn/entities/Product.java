@@ -68,6 +68,14 @@ public class Product implements Serializable {
 		this.id = id;
 	}
 	
+	public Product(UUID id, String name, String sku, String description) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.sku = sku;
+		this.description = description;
+	}
+
 	public Product(String name, String sku, String description) {
 		this.name = name;
 		this.sku = sku;

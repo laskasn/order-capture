@@ -22,6 +22,8 @@ import gr.laskarisn.entities.Customer;
 import gr.laskarisn.entities.Order;
 import gr.laskarisn.entities.Product;
 import gr.laskarisn.entities.customtypes.OrderStatus;
+import gr.laskarisn.messengers.OrderProducts;
+import gr.laskarisn.messengers.PlainCustomer;
 import gr.laskarisn.repositories.CustomerRepository;
 import gr.laskarisn.repositories.OrderRepository;
 import gr.laskarisn.repositories.ProductRepository;
@@ -123,14 +125,14 @@ public class TestAllControllers {
 		   .andExpect(content().contentType(contentType))
 		   .andExpect(jsonPath("$", is(2)));
  	
-    	Customer customer = new Customer("Jeff", "Bezos", "Dummy Street 36, Athens, Greece");
+    	PlainCustomer plainCustomer = new PlainCustomer("Jeff", "Bezos", "Dummy Street 36, Athens, Greece");
 	 	
-	 	String customerJson = mockMvc.perform(post("/customer/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(customer)))
+	 	String customerJson = mockMvc.perform(post("/customer/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(plainCustomer)))
 		   .andExpect(status().isCreated())
 		   .andReturn()
 		   .getResponse().getContentAsString();
 	 	
-	 	customer = gson.fromJson(customerJson, Customer.class);
+	 	Customer customer = gson.fromJson(customerJson, Customer.class);
 	 	
 	 	mockMvc.perform(get("/customer/count"))
 		   .andExpect(status().isOk())
@@ -213,23 +215,27 @@ public class TestAllControllers {
     	assertTrue(!customers.isEmpty());
     	assertTrue(!products.isEmpty());
     	
-    	Order order = new Order(customers.get(0), Arrays.asList(products.get(0)), new Date(), new Date(), OrderStatus.NEW);
+    	OrderProducts neworder = new OrderProducts();
+    	neworder.setCustomerID(customers.get(0).getId());
+    	neworder.setProductIDs(Arrays.asList(products.get(0).getId()));
     	
-    	String orderJson = mockMvc.perform(post("/order/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(order)))
+    	String orderJson = mockMvc.perform(post("/order/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(neworder)))
 		   .andExpect(status().isCreated())
 		   .andReturn()
 		   .getResponse().getContentAsString();
     	
-    	order = gson.fromJson(orderJson, Order.class);
+    	Order order = gson.fromJson(orderJson, Order.class);
     	
     	mockMvc.perform(get("/order/count"))
 		   .andExpect(status().isOk())
 		   .andExpect(content().contentType(contentType))
 		   .andExpect(jsonPath("$", is(3)));
     	
-    	order.setOrderstatus(OrderStatus.COMPLETED);
     	
-    	mockMvc.perform(put("/order/update").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(order)))
+    	mockMvc.perform(put("/order/updatestatus")
+    							.contentType(MediaType.APPLICATION_JSON)
+    							.param("orderid", order.getId().toString())
+    							.param("status", OrderStatus.COMPLETED.name()))
     			   .andExpect(status().isCreated());
     	
     	mockMvc.perform(get("/order/get/"+order.getId().toString()))

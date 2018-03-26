@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import gr.laskarisn.entities.Product;
+import gr.laskarisn.messengers.PlainProduct;
 import gr.laskarisn.repositories.ProductRepository;
 
 @Service
@@ -30,16 +31,16 @@ public class ProductService {
 		return productRepository.findOne(uuid);
 	}
 	
-	public Product createProduct(Product product) throws Exception {
-		if(product.getId()!=null)
-			throw new Exception("Creating a product with an existing id is not permitted.");
-		return productRepository.save(product);
+	public Product createProduct(PlainProduct p) throws Exception {
+//		if(p.getId()!=null)
+//			throw new Exception("Creating a product with an existing id is not permitted.");
+		return productRepository.save(new Product(p.getName(), p.getSku(), p.getDescription()));
 	}
 	
-	public Product updateProduct(Product product) throws Exception {
-		if(product.getId()==null)
+	public Product updateProduct(PlainProduct p) throws Exception {
+		if(p.getId()==null)
 			throw new Exception("Trying to update a product without an ID. That's not allowed!");
-		return productRepository.save(product);
+		return productRepository.save(new Product(p.getId(), p.getName(), p.getSku(), p.getDescription()));
 	}
 	
 	public void deleteProduct(UUID uuid) {

@@ -3,7 +3,8 @@ package gr.laskarisn.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.laskarisn.entities.Order;
-
+import gr.laskarisn.entities.customtypes.OrderStatus;
+import gr.laskarisn.messengers.OrderProducts;
 import gr.laskarisn.repositories.OrderRepository;
 import gr.laskarisn.services.OrderService;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @RestController
@@ -67,9 +69,10 @@ public class OrderController {
 	
 	
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> create(@RequestBody Order order) {
+	public @ResponseBody ResponseEntity<Object> create(@RequestBody OrderProducts neworder) {
+		Order order = new Order();
 		try{
-			order = orderService.createOrder(order);
+			order = orderService.createOrder(neworder);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create!");
@@ -77,11 +80,12 @@ public class OrderController {
 		return ResponseEntity.status(HttpStatus.CREATED).body(order);
 	}
 	
-
-	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> update(@RequestBody Order order) {
+	
+	@RequestMapping(method = RequestMethod.PUT, value = { "/updatestatus" }, consumes = "application/json", produces="application/json")
+	public @ResponseBody ResponseEntity<Object> updatestatus(@RequestParam("orderid") UUID id, @RequestParam("status") OrderStatus status) {
+		Order order = new Order();
 		try{
-			order = orderService.updateOrder(order);
+			order = orderService.updateOrderStatus(id, status);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update!");

@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import gr.laskarisn.entities.Customer;
 import gr.laskarisn.entities.Product;
+import gr.laskarisn.messengers.PlainCustomer;
 import gr.laskarisn.repositories.CustomerRepository;
 
 @Service
@@ -30,16 +33,16 @@ public class CustomerService {
 	}
 	
 	
-	public Customer createCustomer(Customer customer) throws Exception {
-		if(customer.getId()!=null)
-			throw new Exception("Creating a customer with an existing id is not permitted.");
-		return customerRepository.save(customer);
+	public Customer createCustomer(PlainCustomer c) throws Exception {
+//		if(c.getId()!=null)
+//			throw new Exception("Creating a customer with an existing id is not permitted.");
+		return customerRepository.save(new Customer(c.getFirstname(), c.getLastname(), c.getAddress()));
 	}
 	
-	public Customer updateCustomer(Customer customer) throws Exception {
-		if(customer.getId()==null)
-			throw new Exception("Trying to update a customer without an ID. That's not allowed!");
-		return customerRepository.save(customer);
+	public Customer updateCustomer(PlainCustomer c) throws Exception {
+		if(c.getId()==null)
+			throw new Exception("Trying to update a customer without an ID. That's not possible!");
+		return customerRepository.save(new Customer(c.getId(), c.getFirstname(), c.getLastname(), c.getAddress()));
 	}
 	
 	public void deleteCustomer(UUID uuid) {

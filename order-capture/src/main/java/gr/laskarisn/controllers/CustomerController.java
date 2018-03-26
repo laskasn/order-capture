@@ -3,6 +3,7 @@ package gr.laskarisn.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.laskarisn.entities.Customer;
+import gr.laskarisn.messengers.PlainCustomer;
 import gr.laskarisn.services.CustomerService;
 
 import java.util.List;
@@ -55,9 +56,10 @@ public class CustomerController {
 	
 	
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> create(@RequestBody Customer customer) {
+	public @ResponseBody ResponseEntity<Object> create(@RequestBody PlainCustomer plainCustomer) {
+		Customer customer = new Customer();
 		try{
-			customer = customerService.createCustomer(customer);
+			customer = customerService.createCustomer(plainCustomer);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create! "+ ex.getMessage());
@@ -67,9 +69,10 @@ public class CustomerController {
 	
 
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
-	public @ResponseBody ResponseEntity<Object> update(@RequestBody Customer customer) {
+	public @ResponseBody ResponseEntity<Object> update(@RequestBody PlainCustomer plainCustomer) {
+		Customer customer = new Customer();
 		try{
-			customer = customerService.updateCustomer(customer);
+			customer = customerService.updateCustomer(plainCustomer);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update! "+ ex.getMessage());
