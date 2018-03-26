@@ -1,10 +1,10 @@
-####Description:
+#### Description:
 
 A sample webservice based on Spring Boot, utilizing hibernate ORM libraries to materialize data within a PostgreSQL database.
 It also contains the Swagger library to expose in a dynamic fashion the current REST endpoints.
 
 ---
-####Testing the web service:
+#### Testing the web service:
 
 This project comes with a preconfigured (integration) test set, mainly focusing on testing the webapi as a whole (not just the services and or the repositories). 
 
@@ -17,7 +17,7 @@ It can be tested by just running the tests within the **gr.laskarisn.test.TestAl
 
 ---
 
-####Deployment instructions:
+#### Deployment instructions:
 
 **Prerequisites:** 
 
@@ -44,7 +44,7 @@ That will execute first the test suite (described on the previous paragraph **_T
 Then, just deploy on the tomcat, as any usual webapp.
 
 ---
-####Endpoints:
+#### Endpoints:
 
 The endopoints can be easilly viewed from Swagger's UI.
 To view them, the endpoint is of the form:
