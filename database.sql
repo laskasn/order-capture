@@ -10,5 +10,5 @@ create table "customer" (id uuid, firstname varchar(300) not null, lastname varc
 create table "order" (id uuid, customerid uuid not null references "customer"(id), orderdate date not null, lastupdatedate date not null, orderstatus statuses, primary key(id));
 create table "order_product" (orderid uuid not null references "order"(id), productid uuid not null references "product"(id)); -- we do not use primary key(orderid, productid), since we want to have duplication
 
-
+CREATE INDEX order_product_idx ON order_product (orderid, productid);
 CREATE INDEX title_idx ON "order" (orderstatus);
