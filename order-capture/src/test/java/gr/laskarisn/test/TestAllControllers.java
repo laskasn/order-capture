@@ -1,4 +1,4 @@
-package web;
+package gr.laskarisn.test;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -100,8 +100,8 @@ public class TestAllControllers {
         products.add(this.productRepository.save(new Product("product sample 2", "sku-383","sample product for testing")));
         products.add(this.productRepository.save(new Product("product sample 3", "sku-2134","sample product for testing")));
 
-        orders.add(this.orderRepository.save(new Order(customers.get(0), Arrays.asList(products.get(0), products.get(1), products.get(2), products.get(2)), new Date(), new Date(), OrderStatus.NEW)));
-        orders.add(this.orderRepository.save(new Order(customers.get(1), Arrays.asList(products.get(0)), new Date(), new Date(), OrderStatus.NEW)));
+        orders.add(this.orderRepository.save(new Order(customers.get(0), Arrays.asList(products.get(0), products.get(1)), new Date(), new Date(), OrderStatus.NEW)));
+        orders.add(this.orderRepository.save(new Order(customers.get(1), Arrays.asList(products.get(2)), new Date(), new Date(), OrderStatus.NEW)));
 
       
         initialized = true;
