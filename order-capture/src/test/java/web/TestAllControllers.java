@@ -100,8 +100,8 @@ public class TestAllControllers {
         products.add(this.productRepository.save(new Product("product sample 2", "sku-383","sample product for testing")));
         products.add(this.productRepository.save(new Product("product sample 3", "sku-2134","sample product for testing")));
 
-        orders.add(this.orderRepository.save(new Order(customers.get(0), new HashSet<Product>(Arrays.asList(products.get(0), products.get(1), products.get(2))), new Date(), new Date(), OrderStatus.NEW)));
-        orders.add(this.orderRepository.save(new Order(customers.get(1), new HashSet<Product>(Arrays.asList(products.get(0))), new Date(), new Date(), OrderStatus.NEW)));
+        orders.add(this.orderRepository.save(new Order(customers.get(0), Arrays.asList(products.get(0), products.get(1), products.get(2), products.get(2)), new Date(), new Date(), OrderStatus.NEW)));
+        orders.add(this.orderRepository.save(new Order(customers.get(1), Arrays.asList(products.get(0)), new Date(), new Date(), OrderStatus.NEW)));
 
       
         initialized = true;
@@ -213,7 +213,7 @@ public class TestAllControllers {
     	assertTrue(!customers.isEmpty());
     	assertTrue(!products.isEmpty());
     	
-    	Order order = new Order(customers.get(0), new HashSet<Product>(Arrays.asList(products.get(0))), new Date(), new Date(), OrderStatus.NEW);
+    	Order order = new Order(customers.get(0), Arrays.asList(products.get(0)), new Date(), new Date(), OrderStatus.NEW);
     	
     	String orderJson = mockMvc.perform(post("/order/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(order)))
 		   .andExpect(status().isCreated())

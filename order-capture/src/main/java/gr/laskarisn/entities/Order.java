@@ -1,6 +1,7 @@
 package gr.laskarisn.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -60,7 +61,7 @@ public class Order implements Serializable {
 	        joinColumns={@JoinColumn(name="orderid", referencedColumnName="id")},
 	        inverseJoinColumns={@JoinColumn(name="productid", referencedColumnName="id")}
 	    )
-	private Set<Product> products = new HashSet<>();
+	private List<Product> products = new ArrayList<>();
 
 	
 	@Column(name="orderdate")
@@ -83,7 +84,7 @@ public class Order implements Serializable {
 	}
 	
 	
-	public Order(Customer customer, Set<Product> products, Date orderdate, Date lastupdatedate, OrderStatus orderstatus) {
+	public Order(Customer customer, List<Product> products, Date orderdate, Date lastupdatedate, OrderStatus orderstatus) {
 		this.customer = customer;
 		this.products = products;
 		this.orderdate = orderdate;
@@ -103,10 +104,10 @@ public class Order implements Serializable {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	public Set<Product> getProducts() {
+	public List<Product> getProducts() {
 		return products;
 	}
-	public void setProduct(Set<Product> products) {
+	public void setProduct(List<Product> products) {
 		this.products = products;
 	}
 	public Date getOrderdate() {

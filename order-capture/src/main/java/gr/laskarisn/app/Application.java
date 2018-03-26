@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @EntityScan(value = "gr.laskarisn.entities")
 @EnableJpaRepositories(basePackages = {"gr.laskarisn.entities", "gr.laskarisn.repositories"} )
-@SpringBootApplication(scanBasePackages={"gr.laskarisn.entities", "gr.laskarisn.app", "gr.laskarisn.configuration", "gr.laskarisn.repositories", "gr.laskarisn.controllers"})
+@SpringBootApplication(scanBasePackages={"gr.laskarisn.entities", "gr.laskarisn.app", "gr.laskarisn.services", "gr.laskarisn.configuration", "gr.laskarisn.repositories", "gr.laskarisn.controllers"})
 public class Application extends SpringBootServletInitializer{
 	
 	

@@ -3,9 +3,8 @@ package gr.laskarisn.controllers;
 import org.springframework.web.bind.annotation.RestController;
 
 import gr.laskarisn.entities.Customer;
-import gr.laskarisn.repositories.CustomerRepository;
+import gr.laskarisn.services.CustomerService;
 
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,24 +24,19 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class CustomerController {
 	
 	
-	private CustomerRepository customerRepository;
-	
-
 	@Autowired
-	public void setCustomerRepository(CustomerRepository customerRepository) {
-		this.customerRepository = customerRepository;
-	}
+	private CustomerService customerService;
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
-		return customerRepository.count();
+		return customerService.countAllCustomers();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Customer> list() {
-		return customerRepository.findAll();
+		return customerService.listAllCustomers();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/get/{id}" }, produces="application/json")
@@ -54,7 +48,7 @@ public class CustomerController {
 		catch(Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("That's not a valid uuid");
 		}
-		Customer customer = customerRepository.findOne(uuid);
+		Customer customer = customerService.getCustomerByID(uuid);
 		return ResponseEntity.status(HttpStatus.OK).body(customer);
 	}
 	
@@ -63,10 +57,10 @@ public class CustomerController {
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> create(@RequestBody Customer customer) {
 		try{
-			customer = customerRepository.save(customer);
+			customer = customerService.createCustomer(customer);
 		}
 		catch(Exception ex){
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create! "+ ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(customer);
 	}
@@ -75,10 +69,10 @@ public class CustomerController {
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> update(@RequestBody Customer customer) {
 		try{
-			customer = customerRepository.save(customer);
+			customer = customerService.updateCustomer(customer);
 		}
 		catch(Exception ex){
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update! "+ ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(customer);
 	}
@@ -96,7 +90,7 @@ public class CustomerController {
 		}
 		
 		try{
-			customerRepository.delete(uuid);
+			customerService.deleteCustomer(uuid);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete!");

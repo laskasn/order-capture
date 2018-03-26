@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RestController;
 import gr.laskarisn.entities.Product;
 
 import gr.laskarisn.repositories.ProductRepository;
+import gr.laskarisn.services.ProductService;
 
 import java.util.Date;
 import java.util.List;
@@ -26,25 +27,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ProductController {
 	
 	
-	private ProductRepository productRepository;
+	@Autowired 
+	private ProductService productService;
 	
-
-	@Autowired
-	public void setProductRepository(ProductRepository productRepository) {
-		this.productRepository = productRepository;
-	}
 
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
-		return productRepository.count();
+		return productService.countProducts();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Product> list() {
-		return productRepository.findAll();
+		return productService.listAllProducts();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/get/{id}" }, produces="application/json")
@@ -56,7 +53,7 @@ public class ProductController {
 		catch(Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("That's not a valid uuid");
 		}
-		Product product = productRepository.findOne(uuid);
+		Product product = productService.getProductByID(uuid);
 		return ResponseEntity.status(HttpStatus.OK).body(product);
 	}
 	
@@ -65,10 +62,10 @@ public class ProductController {
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> create(@RequestBody Product product) {
 		try{
-			product = productRepository.save(product);
+			product = productService.createProduct(product);
 		}
 		catch(Exception ex){
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create! "+ ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
@@ -77,10 +74,10 @@ public class ProductController {
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> update(@RequestBody Product product) {
 		try{
-			product = productRepository.save(product);
+			product = productService.updateProduct(product);
 		}
 		catch(Exception ex){
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update!");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update! "+ ex.getMessage());
 		}
 		return ResponseEntity.status(HttpStatus.CREATED).body(product);
 	}
@@ -98,7 +95,7 @@ public class ProductController {
 		}
 		
 		try{
-			productRepository.delete(uuid);
+			productService.deleteProduct(uuid);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not delete!");

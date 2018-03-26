@@ -5,10 +5,13 @@ import org.springframework.web.bind.annotation.RestController;
 import gr.laskarisn.entities.Order;
 
 import gr.laskarisn.repositories.OrderRepository;
+import gr.laskarisn.services.OrderService;
 
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,24 +29,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OrderController {
 	
 	
-	private OrderRepository orderRepository;
+	private OrderService orderService;
 	
 	@Autowired
-	public void setOrderRepository(OrderRepository orderRepository) {
-		this.orderRepository = orderRepository;
+	public void setOrderRepository(OrderService orderService) {
+		this.orderService = orderService;
 	}
+	
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
-		return orderRepository.count();
+		return orderService.countAllOrders();
     }
+	
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Order> list() {
-		return orderRepository.findAll();
+		return orderService.listAllOrders();
     }
 	
 	@RequestMapping(method = RequestMethod.GET, value = { "/get/{id}" }, produces="application/json")
@@ -55,7 +60,7 @@ public class OrderController {
 		catch(Exception ex) {
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("That's not a valid uuid");
 		}
-		Order order = orderRepository.findOne(uuid);
+		Order order = orderService.findOrder(uuid);
 		return ResponseEntity.status(HttpStatus.OK).body(order);
 	}
 	
@@ -64,9 +69,7 @@ public class OrderController {
 	@RequestMapping(method = RequestMethod.POST, value = { "/create" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> create(@RequestBody Order order) {
 		try{
-			order.setOrderdate(new Date());
-			order.setLastupdatedate(new Date());
-			order = orderRepository.save(order);
+			order = orderService.createOrder(order);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not create!");
@@ -78,8 +81,7 @@ public class OrderController {
 	@RequestMapping(method = RequestMethod.PUT, value = { "/update" }, consumes = "application/json", produces="application/json")
 	public @ResponseBody ResponseEntity<Object> update(@RequestBody Order order) {
 		try{
-			order.setLastupdatedate(new Date());
-			order = orderRepository.save(order);
+			order = orderService.updateOrder(order);
 		}
 		catch(Exception ex){
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not update!");
@@ -100,7 +102,7 @@ public class OrderController {
 		}
 		
 		try{
-			orderRepository.delete(uuid);
+			orderService.deleteOrder(uuid);
 		}
 		catch(Exception ex){
 			ex.printStackTrace();
