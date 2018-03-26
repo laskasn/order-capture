@@ -33,13 +33,13 @@ public class CustomerController {
 		this.customerRepository = customerRepository;
 	}
 	
-	@RequestMapping("/count")
+	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
 		return customerRepository.count();
     }
 	
-	@RequestMapping("/list")
+	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Customer> list() {
 		return customerRepository.findAll();

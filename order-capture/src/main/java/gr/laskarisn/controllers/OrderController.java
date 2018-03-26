@@ -34,13 +34,13 @@ public class OrderController {
 	}
 	
 	
-	@RequestMapping("/count")
+	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
 		return orderRepository.count();
     }
 	
-	@RequestMapping("/list")
+	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Order> list() {
 		return orderRepository.findAll();

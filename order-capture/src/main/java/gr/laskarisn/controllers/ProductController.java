@@ -35,13 +35,13 @@ public class ProductController {
 	}
 
 	
-	@RequestMapping("/count")
+	@RequestMapping(method = RequestMethod.GET, value = { "/count" })
 	@ResponseBody
     public Long count() {
 		return productRepository.count();
     }
 	
-	@RequestMapping("/list")
+	@RequestMapping(method = RequestMethod.GET, value = { "/list" })
 	@ResponseBody
     public List<Product> list() {
 		return productRepository.findAll();
