@@ -2,10 +2,12 @@ package gr.laskarisn.entities;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -15,6 +17,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -50,9 +54,14 @@ public class Order implements Serializable {
 	@JoinColumn(name = "customerid", referencedColumnName = "id")
 	private Customer customer;
 	
-	@ManyToOne//(cascade = CascadeType.ALL)
-	@JoinColumn(name = "productid", referencedColumnName = "id")
-	private Product product;
+	@ManyToMany//(cascade = CascadeType.ALL)
+	@JoinTable(
+			name = "order_product", 
+	        joinColumns={@JoinColumn(name="orderid", referencedColumnName="id")},
+	        inverseJoinColumns={@JoinColumn(name="productid", referencedColumnName="id")}
+	    )
+	private Set<Product> products = new HashSet<>();
+
 	
 	@Column(name="orderdate")
 	private Date orderdate;
@@ -74,9 +83,9 @@ public class Order implements Serializable {
 	}
 	
 	
-	public Order(Customer customer, Product product, Date orderdate, Date lastupdatedate, OrderStatus orderstatus) {
+	public Order(Customer customer, Set<Product> products, Date orderdate, Date lastupdatedate, OrderStatus orderstatus) {
 		this.customer = customer;
-		this.product = product;
+		this.products = products;
 		this.orderdate = orderdate;
 		this.lastupdatedate = lastupdatedate;
 		this.orderstatus = orderstatus;
@@ -94,11 +103,11 @@ public class Order implements Serializable {
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 	}
-	public Product getProduct() {
-		return product;
+	public Set<Product> getProducts() {
+		return products;
 	}
-	public void setProduct(Product product) {
-		this.product = product;
+	public void setProduct(Set<Product> products) {
+		this.products = products;
 	}
 	public Date getOrderdate() {
 		return orderdate;

@@ -1,20 +1,14 @@
 package web;
 
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.mock.http.MockHttpOutputMessage;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.context.web.WebAppConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 
 import com.google.gson.Gson;
@@ -32,11 +26,11 @@ import gr.laskarisn.repositories.CustomerRepository;
 import gr.laskarisn.repositories.OrderRepository;
 import gr.laskarisn.repositories.ProductRepository;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import static org.hamcrest.Matchers.*;
@@ -106,11 +100,9 @@ public class TestAllControllers {
         products.add(this.productRepository.save(new Product("product sample 2", "sku-383","sample product for testing")));
         products.add(this.productRepository.save(new Product("product sample 3", "sku-2134","sample product for testing")));
 
-        orders.add(this.orderRepository.save(new Order(customers.get(0), products.get(0), new Date(), new Date(), OrderStatus.NEW)));
-        orders.add(this.orderRepository.save(new Order(customers.get(0), products.get(1), new Date(), new Date(), OrderStatus.NEW)));
-        orders.add(this.orderRepository.save(new Order(customers.get(0), products.get(2), new Date(), new Date(), OrderStatus.NEW)));
-        orders.add(this.orderRepository.save(new Order(customers.get(1), products.get(0), new Date(), new Date(), OrderStatus.NEW)));
-        
+        orders.add(this.orderRepository.save(new Order(customers.get(0), new HashSet<Product>(Arrays.asList(products.get(0), products.get(1), products.get(2))), new Date(), new Date(), OrderStatus.NEW)));
+        orders.add(this.orderRepository.save(new Order(customers.get(1), new HashSet<Product>(Arrays.asList(products.get(0))), new Date(), new Date(), OrderStatus.NEW)));
+
       
         initialized = true;
     }
@@ -216,12 +208,12 @@ public class TestAllControllers {
     	mockMvc.perform(get("/order/count"))
     		   .andExpect(status().isOk())
     		   .andExpect(content().contentType(contentType))
-    		   .andExpect(jsonPath("$", is(4)));
+    		   .andExpect(jsonPath("$", is(2)));
     	
     	assertTrue(!customers.isEmpty());
     	assertTrue(!products.isEmpty());
     	
-    	Order order = new Order(customers.get(0), products.get(0), new Date(), new Date(), OrderStatus.NEW);
+    	Order order = new Order(customers.get(0), new HashSet<Product>(Arrays.asList(products.get(0))), new Date(), new Date(), OrderStatus.NEW);
     	
     	String orderJson = mockMvc.perform(post("/order/create").contentType(MediaType.APPLICATION_JSON).content(gson.toJson(order)))
 		   .andExpect(status().isCreated())
@@ -233,7 +225,7 @@ public class TestAllControllers {
     	mockMvc.perform(get("/order/count"))
 		   .andExpect(status().isOk())
 		   .andExpect(content().contentType(contentType))
-		   .andExpect(jsonPath("$", is(5)));
+		   .andExpect(jsonPath("$", is(3)));
     	
     	order.setOrderstatus(OrderStatus.COMPLETED);
     	
@@ -253,7 +245,7 @@ public class TestAllControllers {
     	mockMvc.perform(get("/order/count"))
 		   .andExpect(status().isOk())
 		   .andExpect(content().contentType(contentType))
-		   .andExpect(jsonPath("$", is(4)));
+		   .andExpect(jsonPath("$", is(2)));
     	
     	
     	
