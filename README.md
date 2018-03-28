@@ -6,7 +6,7 @@ It also contains the Swagger library to expose in a dynamic fashion the current 
 ---
 #### Testing the web service:
 
-This project comes with a preconfigured (integration) test set, mainly focusing on testing the webapi as a whole (not just the services and or the repositories). 
+This project comes with a preconfigured (integration) test set, mainly focusing on testing the webapi as a whole (not just the services and/or the repositories). 
 
 The test set uses a configuration which can be found @ src/test/resources
 and requires NO changes for the tests.
@@ -51,4 +51,4 @@ To view them, the endpoint is of the form:
 
 * Case of "standalone" deployment: the endpoint has the form: http://localhost:8080/swagger-ui.html
 * Case of container deployment: the endpoint has the form: http://hostname:port/webapp-name/swagger-ui.html
-where the hostname and port are the hostname and port of the container within which was deployed, and the webapp-name is the name of the war file deployed (by default it is "swagger-ui.html"). So, if deployed on a tomcat locally, the endpoint most probably should read http://localhost:8080/order-capture-ws/swagger-ui.html 
+where the hostname and port are the hostname and port of the container within which was deployed, and the webapp-name is the name of the war file deployed (by default it is "swagger-ui.html"). So, if deployed on a tomcat locally, the endpoint most probably would read http://localhost:8080/order-capture-ws/swagger-ui.html 
